@@ -5,19 +5,19 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function OrderItemsList({ order }) {
   return (
-    <div className="container mt-5">
-      <div className="card shadow-lg border-0">
-        <div className="card-header bg-danger text-white">
-          <h3 className="text-center mb-0">Your Order</h3>
+    <div className="container mt-4">
+      <div className="card shadow-sm border-0">
+        <div className="card-header bg-danger text-white text-center">
+          <h5 className="mb-0">Your Order</h5>
         </div>
-        <div className="card-body">
-          <table className="table table-hover table-responsive-lg text-center">
-            <thead className="thead-light">
+        <div className="card-body p-2">
+          <table className="table table-sm text-center">
+            <thead className="table-light">
               <tr>
                 <th scope="col">Image</th>
                 <th scope="col">Name</th>
+                <th scope="col">Qty</th>
                 <th scope="col">Price</th>
-                <th scope="col">Quantity</th>
                 <th scope="col">Subtotal</th>
               </tr>
             </thead>
@@ -30,31 +30,31 @@ export default function OrderItemsList({ order }) {
                         src={item.food.imageUrl}
                         alt={item.food.name}
                         className="img-thumbnail"
-                        style={{ maxWidth: "120px", borderRadius: "10px" }}
+                        style={{ maxWidth: "60px", borderRadius: "5px" }}
                       />
                     </Link>
                   </td>
                   <td className="align-middle">{item.food.name}</td>
+                  <td className="align-middle">{item.quantity}</td>
                   <td className="align-middle">
                     <Price price={item.food.price} />
                   </td>
-                  <td className="align-middle">{item.quantity}</td>
                   <td className="align-middle">
                     <Price price={item.price} />
                   </td>
                 </tr>
               ))}
+            </tbody>
+            <tfoot>
               <tr className="table-active">
-                <td colSpan="4" className="text-right font-weight-bold">
-                  <h5>Total:</h5>
+                <td colSpan="4" className="text-end fw-bold">
+                  Total:
                 </td>
-                <td className="align-middle">
-                  <h5>
-                    <Price price={order.totalPrice} />
-                  </h5>
+                <td className="text-end">
+                  <Price price={order.totalPrice} />
                 </td>
               </tr>
-            </tbody>
+            </tfoot>
           </table>
         </div>
       </div>

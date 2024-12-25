@@ -8,6 +8,7 @@ import Register from "./pages/Register/Register";
 import CheckoutPage from "./pages/checkout/CheckoutPage";
 import { AuthRoute } from "./components/AuthRoute/AuthRoute";
 import PaymentPage from "./pages/Payment/PaymentPage";
+import Profile from "./pages/profile/Profile";
 
 const AppRoutes = () => {
   return (
@@ -32,6 +33,14 @@ const AppRoutes = () => {
         element={
           <AuthRoute>
             <PaymentPage />
+          </AuthRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <AuthRoute>
+            <Profile />
           </AuthRoute>
         }
       />

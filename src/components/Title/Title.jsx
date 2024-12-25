@@ -1,11 +1,7 @@
-import React from 'react'
+import React from "react";
 
-const Title = ({title, fontSize, margin}) => {
-  return (
-    <h1 style={{fontSize, margin,color:"#616161"}}>
-        {title}
-    </h1>
-  )
-}
+const Title = ({ title, fontSize, margin }) => {
+  return <h1 style={{ fontSize, margin, color: "#fff" }}>{title}</h1>;
+};
 
-export default Title
+export default Title;

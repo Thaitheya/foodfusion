@@ -1,23 +1,30 @@
 import axios from "axios";
 
 export const getUser = () => {
-  sessionStorage.getItem("user")
-    ? JSON.parse(sessionStorage.getItem("user"))
+  localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user"))
     : null;
 };
 
 export const login = async (email, password) => {
   const { data } = await axios.post("api/users/login", { email, password });
-  sessionStorage.setItem("user", JSON.stringify(data));
+  localStorage.setItem("user", JSON.stringify(data));
   return data;
 };
 
 export const register =  async registerData => {
   const {data} = await axios.post('api/users/register', registerData);
-  sessionStorage.setItem('user',JSON.stringify(data));
+  localStorage.setItem('user',JSON.stringify(data));
   return data;
 }
 
 export const logout = () => {
-  sessionStorage.removeItem("user");
+  localStorage.removeItem("user");
 };
+
+
+export const updateProfile = async user => {
+   const {data} = await axios.put('/api/users/updateProfile', user)
+   localStorage.setItem('user', JSON.stringify(data))
+   return data;
+}

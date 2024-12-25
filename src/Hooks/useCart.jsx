@@ -76,7 +76,7 @@ const CartProvider = ({ children }) => {
   };
 
   function getCartFromLocalStorage() {
-    const storedCart = sessionStorage.getItem(CART_KEY);
+    const storedCart = localStorage.getItem(CART_KEY);
     return storedCart ? JSON.parse(storedCart) : EMPTY_CART;
   }
 

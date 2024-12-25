@@ -1,146 +1,83 @@
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import axios from "axios";
+import React, { useState } from "react";
 import { useAuth } from "../../Hooks/useAuth";
+import { useCart } from "../../Hooks/useCart";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { createOrder } from "../../services/OrderService";
+import { toast } from "react-toastify";
+import OrderItemsList from "../../components/OrderListPage/OrderItemList";
 
-const CreateOrderPage = () => {
-  const [items, setItems] = useState([]);
+const CheckoutPage = () => {
   const { user } = useAuth();
+  const { cart } = useCart();
+  const navigate = useNavigate();
+  const [order, setOrder] = useState({ ...cart });
   const {
     register,
-    handleSubmit,
-    reset,
-    setValue,
     formState: { errors },
+    handleSubmit,
   } = useForm();
-   useEffect(() => {
-     if (user) {
-       setValue("name", user.name || "");
-       setValue("email", user.email || "");
-       setValue("totalprice", user.totalPrice || "");
-     }
-   }, [user, setValue]);
-  const onSubmit = async (data) => {
-    try {
-      const orderData = {
-        name: data.name,
-        address: data.address,
-        totalPrice: data.totalPrice,
-        items: items.map((item) => ({
-          food: item.foodId,
-          price: item.price,
-          quantity: item.quantity,
-        })),
-      };
 
-      const response = await axios.post("/api/orders/create", orderData);
+  const submit = async (data) => {
+    try {
+      await createOrder({ ...order, name: data.name, address: data.address });
       toast.success("Order created successfully!");
-      reset();
-      setItems([]);
+      navigate("/payment");
     } catch (error) {
       toast.error("Failed to create order. Please try again.");
-      console.error("Error creating order:", error);
+      console.error(error);
     }
-  };
-  const handleItemChange = (index, field, value) => {
-    const updatedItems = [...items];
-    updatedItems[index][field] = value;
-    setItems(updatedItems);
   };
 
   return (
-    <div className="container mt-5">
-      <h1>Create Order</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
-        <div className="form-group mb-3">
-          <label>Name</label>
+    <div className="container mt-5" style={{ maxWidth: "600px" }}>
+      <form
+        onSubmit={handleSubmit(submit)}
+        className="shadow-sm p-3 rounded border text-center"
+      >
+        <h4 className="mb-3">Order Form</h4>
+        <div className="mb-3">
           <input
             type="text"
-            className={`form-control ${errors.name ? "is-invalid" : ""}`}
+            className={`form-control form-control-sm ${
+              errors.name ? "is-invalid" : ""
+            }`}
+            placeholder="Name"
+            defaultValue={user.name}
             {...register("name", { required: "Name is required" })}
           />
           {errors.name && (
-            <div className="invalid-feedback">{errors.name.message}</div>
+            <div className="invalid-feedback text-start">
+              {errors.name.message}
+            </div>
           )}
         </div>
-
-        <div className="form-group mb-3">
-          <label>Address</label>
-          <textarea
-            className={`form-control ${errors.address ? "is-invalid" : ""}`}
+        <div className="mb-3">
+          <input
+            type="text"
+            className={`form-control form-control-sm ${
+              errors.address ? "is-invalid" : ""
+            }`}
+            placeholder="Address"
+            defaultValue={user.address}
             {...register("address", { required: "Address is required" })}
           />
           {errors.address && (
-            <div className="invalid-feedback">{errors.address.message}</div>
-          )}
-        </div>
-
-        <div className="form-group mb-3">
-          <label>Total Price</label>
-          <input
-            type="number"
-            className={`form-control ${errors.totalPrice ? "is-invalid" : ""}`}
-            {...register("totalPrice", {
-              required: "Total price is required",
-              min: 1,
-            })}
-          />
-          {errors.totalPrice && (
-            <div className="invalid-feedback">{errors.totalPrice.message}</div>
-          )}
-        </div>
-
-        <h4>Items</h4>
-        {items.map((item, index) => (
-          <div key={index} className="mb-3">
-            <div className="row">
-              <div className="col-md-4">
-                <label>Food ID</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={item.foodId}
-                  onChange={(e) =>
-                    handleItemChange(index, "foodId", e.target.value)
-                  }
-                />
-              </div>
-              <div className="col-md-4">
-                <label>Price</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  value={item.price}
-                  onChange={(e) =>
-                    handleItemChange(index, "price", parseFloat(e.target.value))
-                  }
-                />
-              </div>
-              <div className="col-md-4">
-                <label>Quantity</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  value={item.quantity}
-                  onChange={(e) =>
-                    handleItemChange(
-                      index,
-                      "quantity",
-                      parseInt(e.target.value)
-                    )
-                  }
-                />
-              </div>
+            <div className="invalid-feedback text-start">
+              {errors.address.message}
             </div>
-          </div>
-        ))}
-        <button type="submit" className="btn btn-primary">
-          Submit Order
+          )}
+        </div>
+        <div className="mb-3 text-start">
+          <h6 className="fw-bold">Order Items:</h6>
+          <OrderItemsList order={order} />
+        </div>
+        <button type="submit" className="btn btn-danger btn-sm w-100">
+          Go to Payment
         </button>
       </form>
     </div>
   );
 };
 
-export default CreateOrderPage;
+export default CheckoutPage;
