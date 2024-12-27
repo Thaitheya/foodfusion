@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import Title from "../Title/Title";
-import { changePassword } from "../../services/AuthService"; // Assuming this function will handle the API request
+import { useAuth } from "../../Hooks/useAuth";
 
 const Changepassword = () => {
   const [message, setMessage] = useState("");
@@ -11,18 +11,9 @@ const Changepassword = () => {
     getValues,
     formState: { errors },
   } = useForm();
-
-  // Handle form submission
-  const submit = async (data) => {
-    const { oldPassword, newPassword } = data;
-
-    try {
-      // Call the service to update the password
-      const response = await changePassword(oldPassword, newPassword);
-      setMessage("Password updated successfully!");
-    } catch (error) {
-      setMessage("Failed to update password.");
-    }
+  const { changePassword } = useAuth();
+  const submit = async (password) => {
+    changePassword(password);
   };
 
   return (
@@ -31,19 +22,23 @@ const Changepassword = () => {
       <form onSubmit={handleSubmit(submit)}>
         {/* Old Password */}
         <div className="mb-3">
-          <label htmlFor="oldPassword" className="form-label">
-            Old Password
+          <label htmlFor="Current Password" className="form-label">
+            Current Password
           </label>
           <input
             type="password"
-            className={`form-control ${errors.oldPassword ? "is-invalid" : ""}`}
-            id="oldPassword"
-            {...register("oldPassword", {
-              required: "Old password is required",
+            className={`form-control ${
+              errors.currentPassword ? "is-invalid" : ""
+            }`}
+            id="currentPassword"
+            {...register("currentPassword", {
+              required: "current password is required",
             })}
           />
-          {errors.oldPassword && (
-            <div className="invalid-feedback">{errors.oldPassword.message}</div>
+          {errors.currentPassword && (
+            <div className="invalid-feedback">
+              {errors.currentPassword.message}
+            </div>
           )}
         </div>
 
@@ -94,8 +89,6 @@ const Changepassword = () => {
             </div>
           )}
         </div>
-
-        {/* Message for success or failure */}
         {message && (
           <div
             className={`alert ${
@@ -109,8 +102,7 @@ const Changepassword = () => {
           </div>
         )}
 
-        {/* Submit Button */}
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-danger w-100">
           Change Password
         </button>
       </form>

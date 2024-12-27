@@ -30,7 +30,7 @@ const Search = () => {
         onKeyDown={handleKeyDown}
       />
       <button
-        className="btn btn-danger"
+        className="btn btn-primary"
         type="button"
         onClick={handleSearch}
         style={{ borderRadius: "0px 50px 50px 0px" }}

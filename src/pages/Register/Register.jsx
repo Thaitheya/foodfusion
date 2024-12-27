@@ -1,34 +1,50 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Title from "../../components/Title/Title";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../../Hooks/useAuth";
-const Register = () => {
-    const auth = useAuth();
-    const {user} = auth;
-    const navigate = useNavigate();
-    const [params] = useSearchParams();
-    const returnUrl = params.get('returnUrl');
+import foodImage from "../../../public/foods/food-4.jpg"; // Assuming you have a food image in assets
 
-    useEffect (()=> {
-        if(!user) return;
-        returnUrl ? navigate(returnUrl) : navigate('/')
-    },[user]);
+const Register = () => {
+  const auth = useAuth();
+  const { user } = auth;
+  const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const returnUrl = params.get("returnUrl");
+
+  useEffect(() => {
+    if (!user) return;
+    returnUrl ? navigate(returnUrl) : navigate("/");
+  }, [user]);
+
   const {
     handleSubmit,
     register,
     getValues,
     formState: { errors },
   } = useForm();
+
   const submit = async (data) => {
-   await auth.register(data);
+    await auth.register(data);
   };
+
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
-        <div className="col-md-6">
+        {/* Left Column - Food Image */}
+        <div className="col-md-6 col-lg-4 d-none d-lg-block">
+          <img
+            src={foodImage}
+            alt="Food"
+            className="img-fluid"
+            style={styles.image}
+          />
+        </div>
+
+        {/* Right Column - Register Form */}
+        <div className="col-md-6 col-lg-4">
           <div className="card shadow">
             <div className="card-body">
               <Title title="Register" />
@@ -86,7 +102,7 @@ const Register = () => {
                 </div>
 
                 {/* Password Input */}
-                <div className="mb-2">
+                <div className="mb-2 p-1">
                   <label htmlFor="password" className="form-label">
                     Password
                   </label>
@@ -162,15 +178,13 @@ const Register = () => {
                   )}
                 </div>
 
-                <button type="submit" className="btn btn-danger w-100 btn-sm">
+                <button type="submit" className="btn btn-primary w-100 btn-sm">
                   Register
                 </button>
                 <div>
-                  Already a fusioner? &nbsp;
+                  Already a member? &nbsp;
                   <Link
-                    to={`/login?${
-                      returnUrl ? "returnUrl=" + returnUrl : ""
-                    }`}
+                    to={`/login${returnUrl ? `?returnUrl=${returnUrl}` : ""}`}
                   >
                     Login here
                   </Link>
@@ -182,6 +196,16 @@ const Register = () => {
       </div>
     </div>
   );
+};
+
+// Styles for layout and image
+const styles = {
+  image: {
+    borderRadius: "8px",
+    objectFit: "cover",
+    height: "100%",
+    paddingBottom: "40px"
+  },
 };
 
 export default Register;

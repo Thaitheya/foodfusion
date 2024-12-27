@@ -9,6 +9,7 @@ import CheckoutPage from "./pages/checkout/CheckoutPage";
 import { AuthRoute } from "./components/AuthRoute/AuthRoute";
 import PaymentPage from "./pages/Payment/PaymentPage";
 import Profile from "./pages/profile/Profile";
+import OrderPage from "./pages/orders/OrderPage";
 
 const AppRoutes = () => {
   return (
@@ -41,6 +42,14 @@ const AppRoutes = () => {
         element={
           <AuthRoute>
             <Profile />
+          </AuthRoute>
+        }
+      />
+      <Route
+        path="/orders/:filter?"
+        element={
+          <AuthRoute>
+            <OrderPage />
           </AuthRoute>
         }
       />

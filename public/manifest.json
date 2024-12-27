@@ -1,0 +1,11 @@
+{
+  "name": "Food Fusion",
+  "short_name": "Fusion",
+  "start_url": "/",
+  "display": "standalone",
+  "serviceworker": {
+    "src": "/service-worker.js",
+    "scope": "/",
+    "type": "module"
+  }
+}

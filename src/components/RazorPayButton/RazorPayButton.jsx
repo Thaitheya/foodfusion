@@ -7,7 +7,6 @@ const PaymentPage = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch the current user's new order
     const fetchOrder = async () => {
       try {
         setLoading(true);
@@ -34,23 +33,23 @@ const PaymentPage = () => {
     try {
       setLoading(true);
 
+      // Step 1: Create a Razorpay order on the backend
       const { data: razorpayOrder } = await axios.post(
         "/api/orders/create",
-        {
-          ...order,
-        },
+        { ...order },
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
       const options = {
-        key: "rzp_test_SvKyH3a2rHiOKu",
-        amount: razorpayOrder.amount,
-        currency: razorpayOrder.currency,
+        key: "rzp_test_pMRWrdCMj5F1lQ",
+        amount: razorpayOrder.totalPrice * 100,
+        currency: "INR",
         name: "Food Fusion",
         description: "Order transaction",
-        order_id: razorpayOrder._id,
+        order_id: razorpayOrder.razorpay_order_id,
         handler: async (response) => {
+          console.log("Payment Response:", response);
           try {
             const verificationData = {
               razorpay_order_id: response.razorpay_order_id,
@@ -77,8 +76,8 @@ const PaymentPage = () => {
         },
         prefill: {
           name: order.name,
-          email: "user@example.com", // Replace with the user's email
-          contact: "9999999999", // Replace with the user's contact
+          email: order.email || "test@example.com", // Replace with user's email
+          contact: order.contact || "9952462594", // Replace with user's contact
         },
         theme: {
           color: "#F37254",
@@ -86,6 +85,11 @@ const PaymentPage = () => {
       };
 
       const razorpay = new window.Razorpay(options);
+      razorpay.on("payment.failed", function (response) {
+        console.error("Payment failed:", response.error);
+        alert("Payment failed. Please try again.");
+      });
+
       razorpay.open();
       setLoading(false);
     } catch (err) {
@@ -102,7 +106,9 @@ const PaymentPage = () => {
     <div>
       {order ? (
         <div>
-          <button onClick={handlePayment} className="btn btn-danger">Pay Now</button>
+          <button onClick={handlePayment} className="btn btn-danger">
+            Pay Now
+          </button>
         </div>
       ) : (
         <p>No pending orders.</p>

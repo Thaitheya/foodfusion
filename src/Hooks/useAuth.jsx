@@ -44,9 +44,13 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  
+  const changePassword = async password => {
+    await userService.changePassword(password);
+    logout();
+    toast.success("Password changed successfully, Please login again")
+  }
   return (
-    <AuthContext.Provider value={{ user, login, logout, register, updateProfile }}>
+    <AuthContext.Provider value={{ user, login, logout, register, updateProfile, changePassword }}>
       {children}
     </AuthContext.Provider>
   );

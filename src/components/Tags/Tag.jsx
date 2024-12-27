@@ -8,7 +8,7 @@ const Tag = ({ tags }) => {
   return (
     <div className="dropdown">
       <button
-        className="btn btn-danger dropdown-toggle w-100"
+        className="btn btn-primary dropdown-toggle w-100"
         type="button"
         id="tagDropdown"
         data-bs-toggle="dropdown"
@@ -24,7 +24,7 @@ const Tag = ({ tags }) => {
               className="dropdown-item d-flex justify-content-between align-items-center"
             >
               {tag.name}
-              <span className="badge bg-danger">{tag.count}</span>
+              <span className="badge bg-primary">{tag.count}</span>
             </Link>
           </li>
         ))}

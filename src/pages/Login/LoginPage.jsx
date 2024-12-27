@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../Hooks/useAuth";
 import Title from "../../components/Title/Title";
+import foodImage from "../../../public/foods/food-8.jpg"; // Assuming you have a food image in assets
 
 const LoginPage = () => {
   const {
@@ -37,7 +38,18 @@ const LoginPage = () => {
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
-        <div className="col-md-6">
+        {/* Left Column - Food Image */}
+        <div className="col-md-6 col-lg-4 d-none d-lg-block">
+          <img
+            src={foodImage}
+            alt="Food"
+            className="img-fluid"
+            style={styles.image}
+          />
+        </div>
+
+        {/* Right Column - Login Form */}
+        <div className="col-md-6 col-lg-4">
           <div className="card shadow">
             <div className="card-body">
               <Title title="Login" />
@@ -95,7 +107,7 @@ const LoginPage = () => {
                 {/* Display error from login */}
                 <button
                   type="submit"
-                  className="btn btn-danger w-100"
+                  className="btn btn-primary w-100"
                   disabled={loading}
                 >
                   {loading ? "Logging in..." : "Login"}
@@ -103,8 +115,8 @@ const LoginPage = () => {
                 <div className="mt-3">
                   New to fusion? &nbsp;
                   <Link
-                    to={`/register?${
-                      returnUrl ? "returnUrl=" + returnUrl : ""
+                    to={`/register${
+                      returnUrl ? `?returnUrl=${returnUrl}` : ""
                     }`}
                   >
                     Register here
@@ -117,6 +129,15 @@ const LoginPage = () => {
       </div>
     </div>
   );
+};
+
+// Styles for layout and image
+const styles = {
+  image: {
+    borderRadius: "8px",
+    objectFit: "cover",
+    height: "100%",
+  },
 };
 
 export default LoginPage;
