@@ -1,4 +1,7 @@
 import axios from "axios";
 
 
-axios.defaults.baseURL ="https://foodfusion-server.onrender.com";
+axios.defaults.baseURL =
+  process.env.NODE_ENV !== "production"
+    ? "https://foodfusion-server.onrender.com"
+    : "/";

@@ -24,3 +24,25 @@ export const getById = async foodId => {
   const {data} = await axios.get('/api/foods/' +foodId )
   return data;
 }
+
+export const deleteById = async (foodId)=> {
+   await axios.delete('/api/foods/'+ foodId)
+}
+
+export const updateFood = async (foodId) => {
+  const { data } = await axios.put("/api/foods/editFood" + foodId);
+  return data;
+};
+export const addFood = async ()=> {
+ const {data} =  await axios.post('/api/foods/addFood');
+ return data 
+}
+
+export const update = async (food)=> {
+  await axios.put('/api/foods', food);
+}
+
+export const add = async (food) => {
+  const {data} = await axios.post('/api/foods', food);
+  return data;
+}

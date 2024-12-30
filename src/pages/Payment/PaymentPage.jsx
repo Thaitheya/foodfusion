@@ -37,10 +37,10 @@ const PaymentPage = () => {
             </p>
           </div>
 
-          {/* Order Items */}
+          {/* Order Items
           <div className="border-top pt-3 mt-3">
             <OrderItemsList order={order} />
-          </div>
+          </div> */}
         </div>
       </div>
 

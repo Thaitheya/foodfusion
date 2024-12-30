@@ -1,5 +1,5 @@
 import React from "react";
-import { useCart } from "../../Hooks/UseCart";
+import { useCart } from "../../Hooks/useCart";
 import Title from "../../components/Title/Title";
 import { Link } from "react-router-dom";
 const CartPage = () => {
@@ -92,7 +92,10 @@ const CartPage = () => {
                 <strong>Price:</strong> ₹{cart.totalPrice.toFixed(2)}
               </p>
               <button className="btn btn-danger w-100">
-                <Link to="/checkout" style={{ color: "#fff", textDecoration:"none" }}>
+                <Link
+                  to="/checkout"
+                  style={{ color: "#fff", textDecoration: "none" }}
+                >
                   Proceed To Checkout
                 </Link>
               </button>

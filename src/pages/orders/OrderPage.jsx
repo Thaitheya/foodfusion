@@ -40,7 +40,7 @@ const OrderPage = () => {
   // Function to format the date into a more readable format
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
+    return date.toLocaleDateString("en-IN", {
       weekday: "long",
       year: "numeric",
       month: "long",
@@ -68,8 +68,6 @@ const OrderPage = () => {
           ))}
         </div>
       )}
-
-      {/* Loading Indicator */}
       {loading ? (
         <div className="text-center mt-4">
           <div className="spinner-border text-primary" role="status">
@@ -78,7 +76,6 @@ const OrderPage = () => {
         </div>
       ) : (
         <div className="row mt-4">
-          {/* Orders List */}
           {orders.length > 0 ? (
             orders.map((order, index) => (
               <div key={order.id} className="col-md-6 col-lg-4 mb-4">
@@ -104,7 +101,6 @@ const OrderPage = () => {
                       {formatDate(order.createdAt)}
                     </p>
 
-                    {/* Order Details */}
                     <div className="accordion" id={`accordion-${order.id}`}>
                       <div className="accordion-item">
                         <h2

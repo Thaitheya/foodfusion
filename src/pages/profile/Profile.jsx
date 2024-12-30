@@ -20,7 +20,6 @@ const Profile = () => {
     <div className="container mt-5">
       <Title title="Profile Settings" />
       <div className="row justify-content-center g-4">
-        {/* Update Profile Section */}
         <div className="col-md-4">
           <div className="p-2 border rounded bg-light shadow">
             <h4 className="mb-4 text-center">Update Profile</h4>

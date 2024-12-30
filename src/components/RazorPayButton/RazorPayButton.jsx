@@ -1,118 +1,54 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { getNewOrderForCurrentUser } from "../../services/OrderService";
+import Title from "../../components/Title/Title";
+import OrderItemsList from "../../components/OrderListPage/OrderItemList";
+import RazorPayButton from "../../components/RazorPayButton/RazorPayButton";
 
 const PaymentPage = () => {
-  const [order, setOrder] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [order, setOrder] = useState();
 
   useEffect(() => {
-    const fetchOrder = async () => {
-      try {
-        setLoading(true);
-        const { data } = await axios.get("/api/orders/newOrderForCurrentUser", {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        });
-        setOrder(data);
-        setLoading(false);
-      } catch (err) {
-        setError("Failed to fetch the order.");
-        setLoading(false);
-      }
-    };
-
-    fetchOrder();
+    getNewOrderForCurrentUser().then((data) => setOrder(data));
   }, []);
 
-  const handlePayment = async () => {
-    if (!order) {
-      alert("No order available to process payment.");
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      // Step 1: Create a Razorpay order on the backend
-      const { data: razorpayOrder } = await axios.post(
-        "/api/orders/create",
-        { ...order },
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      );
-      const options = {
-        key: "rzp_test_pMRWrdCMj5F1lQ",
-        amount: razorpayOrder.totalPrice * 100,
-        currency: "INR",
-        name: "Food Fusion",
-        description: "Order transaction",
-        order_id: razorpayOrder.razorpay_order_id,
-        handler: async (response) => {
-          console.log("Payment Response:", response);
-          try {
-            const verificationData = {
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-            };
-
-            const { data: verifiedOrder } = await axios.post(
-              "/api/orders/verify-payment",
-              verificationData,
-              {
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-              }
-            );
-
-            alert("Payment successful!");
-            console.log("Verified Order:", verifiedOrder);
-          } catch (err) {
-            console.error("Payment verification failed:", err);
-            alert("Payment verification failed.");
-          }
-        },
-        prefill: {
-          name: order.name,
-          email: order.email || "test@example.com", // Replace with user's email
-          contact: order.contact || "9952462594", // Replace with user's contact
-        },
-        theme: {
-          color: "#F37254",
-        },
-      };
-
-      const razorpay = new window.Razorpay(options);
-      razorpay.on("payment.failed", function (response) {
-        console.error("Payment failed:", response.error);
-        alert("Payment failed. Please try again.");
-      });
-
-      razorpay.open();
-      setLoading(false);
-    } catch (err) {
-      console.error("Error initiating payment:", err);
-      alert("Failed to initiate payment.");
-      setLoading(false);
-    }
-  };
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+  if (!order) return <div>Loading...</div>;
 
   return (
-    <div>
-      {order ? (
-        <div>
-          <button onClick={handlePayment} className="btn btn-danger">
-            Pay Now
-          </button>
+    <div className="container mt-5">
+      {/* Order Card */}
+      <div className="card shadow-lg border-0 rounded-lg">
+        <div className="card-header bg-danger text-white text-center py-3">
+          <Title title="Order Summary" fontSize="1.8rem" />
         </div>
-      ) : (
-        <p>No pending orders.</p>
-      )}
+        <div className="card-body">
+          {/* Order Details */}
+          <div className="mb-4">
+            <h5 className="font-weight-bold">Name:</h5>
+            <p className="text-muted">{order.name}</p>
+          </div>
+          <div className="mb-4">
+            <h5 className="font-weight-bold">Address:</h5>
+            <p className="text-muted">{order.address}</p>
+          </div>
+          <div className="mb-4">
+            <h5 className="font-weight-bold">Total Amount:</h5>
+            <p className="h5 font-weight-bold text-success">
+              ₹{order.totalPrice}
+            </p>
+          </div>
+          <div className="border-top pt-3 mt-3">
+            <OrderItemsList order={order} />
+          </div>
+        </div>
+      </div>
+      <div className="mt-4 text-center">
+        <h4 className="mb-4">Proceed with Payment</h4>
+        <RazorPayButton order={order} />
+      </div>
+      <div className="alert alert-info mt-4 text-center" role="alert">
+        <strong>Important:</strong> Please ensure the order details are correct
+        before proceeding with the payment.
+      </div>
     </div>
   );
 };

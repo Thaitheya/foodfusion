@@ -7,15 +7,11 @@ export default function OrderItemsList({ order }) {
   return (
     <div className="container mt-5">
       <div className="card shadow-lg border-0 rounded-3">
-        {/* Card Header */}
         <div className="card-header bg-primary text-white text-center py-3">
           <h4 className="mb-0">Your Order Summary</h4>
         </div>
-
-        {/* Card Body */}
         <div className="card-body px-4 py-3">
           <table className="table table-hover align-middle">
-            {/* Table Header */}
             <thead className="table-light">
               <tr>
                 <th scope="col" className="text-center">
@@ -34,7 +30,6 @@ export default function OrderItemsList({ order }) {
               </tr>
             </thead>
 
-            {/* Table Body */}
             <tbody>
               {order.items.map((item) => (
                 <tr key={item.food.id}>
@@ -64,7 +59,6 @@ export default function OrderItemsList({ order }) {
               ))}
             </tbody>
 
-            {/* Table Footer */}
             <tfoot>
               <tr>
                 <td colSpan="4" className="text-end fw-bold fs-5">

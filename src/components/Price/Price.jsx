@@ -15,3 +15,5 @@ export const Price = ({ price = 0, locale = "en-IN", currency = "INR" }) => {
 //   locale: "en-IN",
 //   currency: "INR",
 // };
+
+

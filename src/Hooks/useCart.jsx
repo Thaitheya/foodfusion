@@ -80,13 +80,13 @@ const CartProvider = ({ children }) => {
     return storedCart ? JSON.parse(storedCart) : EMPTY_CART;
   }
 
-  const clearCart = ()=> {
-    sessionStorage.removeItem(CART_KEY)
-    const {items, totalPrice, totalCount } = EMPTY_CART;
+  const clearCart = () => {
+    localStorage.removeItem(CART_KEY);
+    const { items, totalPrice, totalCount } = EMPTY_CART;
     setCartItems(items);
-    setTotalCount(totalCount);
     setTotalPrice(totalPrice);
-  }
+    setTotalCount(totalCount);
+  };
 
   return (
     <CartContext.Provider

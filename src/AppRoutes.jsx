@@ -10,6 +10,10 @@ import { AuthRoute } from "./components/AuthRoute/AuthRoute";
 import PaymentPage from "./pages/Payment/PaymentPage";
 import Profile from "./pages/profile/Profile";
 import OrderPage from "./pages/orders/OrderPage";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import AdminRoute from "./components/AdminRoute/AdminRoute";
+import AdminPage from "./pages/AdminPage/AdminPage";
+import FoodEditPage from "./pages/FoodEdit/FoodEditPage";
 
 const AppRoutes = () => {
   return (
@@ -51,6 +55,38 @@ const AppRoutes = () => {
           <AuthRoute>
             <OrderPage />
           </AuthRoute>
+        }
+      />
+      <Route
+        path="/dashboard"
+        element={
+          <AuthRoute>
+            <Dashboard />
+          </AuthRoute>
+        }
+      />
+      <Route
+        path="/admin/foods/:searchTerm?"
+        element={
+          <AdminRoute>
+            <AdminPage />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/addFood"
+        element={
+          <AdminRoute>
+            <FoodEditPage />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/editFood/:foodId"
+        element={
+          <AdminRoute>
+            <FoodEditPage />
+          </AdminRoute>
         }
       />
     </Routes>

@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Search = () => {
+const Search = ({
+  searchRoute = "/search/",
+  defaultRoute = "/",
+  margin = "1rem 0",
+}) => {
   const [term, setTerm] = useState("");
   const navigate = useNavigate();
 
   const handleSearch = () => {
-    if (term.trim()) {
-      navigate(`/search/${term}`);
-    } else {
-      navigate("/");
-    }
+    term.trim() ? navigate(searchRoute + term) : navigate(defaultRoute);
   };
 
   const handleKeyDown = (e) => {
@@ -20,7 +20,7 @@ const Search = () => {
   };
 
   return (
-    <div className="input-group">
+    <div className="input-group" style={{ margin }}>
       <input
         type="text"
         className="form-control"
@@ -29,12 +29,7 @@ const Search = () => {
         onChange={(e) => setTerm(e.target.value)}
         onKeyDown={handleKeyDown}
       />
-      <button
-        className="btn btn-primary"
-        type="button"
-        onClick={handleSearch}
-        style={{ borderRadius: "0px 50px 50px 0px" }}
-      >
+      <button className="btn btn-primary" type="button" onClick={handleSearch}>
         Search
       </button>
     </div>
