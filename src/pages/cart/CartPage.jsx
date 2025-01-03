@@ -79,8 +79,6 @@ const CartPage = () => {
             </div>
           )}
         </div>
-
-        {/* Cart Summary Section */}
         <div className="col-lg-4">
           <div className="card shadow-sm">
             <div className="card-body">
@@ -91,7 +89,7 @@ const CartPage = () => {
               <p className="card-text">
                 <strong>Price:</strong> ₹{cart.totalPrice.toFixed(2)}
               </p>
-              <button className="btn btn-danger w-100">
+              <button className="btn btn-primary w-100">
                 <Link
                   to="/checkout"
                   style={{ color: "#fff", textDecoration: "none" }}

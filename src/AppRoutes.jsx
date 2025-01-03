@@ -53,7 +53,7 @@ const AppRoutes = () => {
         path="/orders/:filter?"
         element={
           <AuthRoute>
-            <OrderPage />
+           <OrderPage />
           </AuthRoute>
         }
       />

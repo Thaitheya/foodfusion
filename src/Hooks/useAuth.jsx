@@ -36,13 +36,23 @@ export const AuthProvider = ({ children }) => {
     toast.success("Logout successful");
   };
 
-  const updateProfile = async user => {
-    const updateUser = await userService.updateProfile(user);
-    toast.success("Profile updated Successfully");
-    if(updateUser) {
-      setUser(updateUser);
+  const updateProfile = async (user) => {
+    if (!user.name || !user.address) {
+      toast.error("All fields are required.");
+      return;
     }
-  }
+    try {
+      const updatedUser = await userService.updateProfile(user);
+      toast.success("Profile updated successfully!");
+      if (updatedUser) {
+        setUser(updatedUser);
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast.error("Failed to update profile. Please try again later.");
+    }
+  };
+  
 
   const changePassword = async password => {
     await userService.changePassword(password);
