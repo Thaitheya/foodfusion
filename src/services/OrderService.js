@@ -12,6 +12,7 @@ export const updatePaymentStatus = async (paymentId) => {
     return data;
   } catch (error) {}
 };
+
 export const getNewOrderForCurrentUser = async () => {
   const { data } = await axios.get("/api/orders/newOrderForCurrentUser");
   return data;
@@ -26,3 +27,9 @@ export const getAllStatus = async () => {
   const { data } = await axios.get("/api/orders/allstatus");
   return data;
 };
+
+
+export const trackOrderById = async (orderId) => {
+  const { data } = await axios.get(`/api/orders/track/${orderId}`);
+  return data;
+}

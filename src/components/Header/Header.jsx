@@ -2,41 +2,50 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../Hooks/useCart";
 import { useAuth } from "../../Hooks/useAuth";
-
 const Header = () => {
   const { user, logout } = useAuth();
   const { cart } = useCart();
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
+
   const handleDashboardClick = (e) => {
-     e.preventDefault();
-     navigate("/dashboard");
-  }
+    e.preventDefault();
+    navigate("/dashboard");
+  };
+
   return (
-    <header className="bg-light shadow-sm border-bottom">
+    <>
+    <style>
+        {`
+          .nav-item.dropdown:hover .dropdown-menu {
+            display: block;
+          }
+          .nav-item.dropdown .dropdown-toggle::after {
+            display: none;
+          }
+        `}
+      </style>
+      <header className="bg-light shadow-sm border-bottom">
       <div className="container d-flex justify-content-between align-items-center py-3">
-        {/* Logo */}
         <Link to="/" className="navbar-brand fw-bold text-primary">
           Food Fusion
         </Link>
 
-        {/* Navigation */}
         <nav>
           <ul className="nav align-items-center">
             {user ? (
               <li className="nav-item dropdown">
                 <Link
+                  to="#"
                   onClick={handleDashboardClick}
                   className="nav-link dropdown-toggle text-dark fw-medium"
                   id="userMenu"
+                  role="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
                   <i className="bi bi-person-circle me-2"></i> {user.name}
                 </Link>
-                <ul
-                  className="dropdown-menu dropdown-menu-end shadow-sm"
-                  aria-labelledby="userMenu"
-                >
+                <ul className="dropdown-menu" aria-labelledby="userMenu">
                   <li>
                     <Link to="/profile" className="dropdown-item">
                       <i className="bi bi-person me-2"></i> Profile
@@ -44,7 +53,7 @@ const Header = () => {
                   </li>
                   <li>
                     <Link to="/orders" className="dropdown-item">
-                      <i className="bi bi-list-check me-2"></i> Orders
+                      <i className="bi bi-list-check me-2"></i> My Orders
                     </Link>
                   </li>
                   <li>
@@ -84,6 +93,8 @@ const Header = () => {
         </nav>
       </div>
     </header>
+    </>
+    
   );
 };
 

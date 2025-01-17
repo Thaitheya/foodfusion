@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useCart } from "../../Hooks/useCart";
+
 const RazorPayButton = () => {
   const navigate = useNavigate();
+  const { clearCart } = useCart();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -27,53 +30,56 @@ const RazorPayButton = () => {
   }, []);
 
   const handlePayment = async () => {
-    if (!order) {
-      toast.error("No order available to process payment.");
-      return;
-    }
-
     try {
       setLoading(true);
 
-      const { data: razorpayOrder } = await axios.post(
-        "/api/orders/create",
-        { ...order, totalPrice: order.totalPrice },
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        },
-      );
+      let currentOrder = order;
+
+      if (!currentOrder) {
+        const { data: newOrder } = await axios.post(
+          "/api/orders/create",
+          {
+            items: currentOrder.cartItems,
+            name: currentOrder.name,
+            address: currentOrder.address,
+          },
+          {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          }
+        );
+        currentOrder = newOrder;
+        setOrder(newOrder);
+      }
 
       const options = {
         key: "rzp_test_pMRWrdCMj5F1lQ",
-        amount: razorpayOrder.totalPrice * 100,
+        amount: currentOrder.totalPrice * 100,
         currency: "INR",
         name: "Food Fusion",
         description: "Order transaction",
-        order_id: razorpayOrder.razorpay_order_id,
+        order_id: currentOrder.order_id,
         handler: async (response) => {
           try {
-            const verificationData = {
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-            };
-
-            await axios.post("/api/orders/verify-payment", verificationData, {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-            });
+            await axios.put(
+              "/api/orders/pay",
+              { paymentId: response.razorpay_payment_id },
+              {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+              }
+            );
 
             toast.success("Payment successful! Your order is confirmed.");
+            clearCart();
+            navigate(`/track/` + response.razorpay_payment_id);
           } catch (err) {
-            console.error("Payment verification failed:", err);
-            toast.error("Payment verification failed. Please contact support.");
+            console.error("Failed to update payment status:", err);
+            toast.error("Failed to update payment status. Please contact support.");
           }
         },
         prefill: {
-          name: order.name,
-          email: order.email || "test@example.com",
-          contact: order.contact || "9952462594",
+          name: currentOrder.name,
+          email: currentOrder.email || "test@example.com",
+          contact: currentOrder.contact || "9952462594",
         },
         theme: {
           color: "#F37254",
@@ -88,7 +94,6 @@ const RazorPayButton = () => {
 
       razorpay.open();
       setLoading(false);
-      navigate("/orders");
     } catch (err) {
       console.error("Error initiating payment:", err);
       toast.error("Failed to initiate payment. Please try again.");

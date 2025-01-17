@@ -37,7 +37,6 @@ const OrderPage = () => {
     });
   }, [filter]);
 
-  // Function to format the date into a more readable format
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-IN", {
@@ -46,6 +45,17 @@ const OrderPage = () => {
       month: "long",
       day: "numeric",
     });
+  };
+  const getStatusClass = (status) => {
+    if (status === "PAYED") {
+      return "bg-success";
+    } else if (status === "NEW") {
+      return "bg-primary";
+    } else if (status === "CANCELLED") {
+      return "bg-danger";
+    } else {
+      return "bg-warning";
+    }
   };
 
   return (
@@ -68,6 +78,7 @@ const OrderPage = () => {
           ))}
         </div>
       )}
+
       {loading ? (
         <div className="text-center mt-4">
           <div className="spinner-border text-primary" role="status">
@@ -77,20 +88,14 @@ const OrderPage = () => {
       ) : (
         <div className="row mt-4">
           {orders.length > 0 ? (
-            orders.map((order, index) => (
-              <div key={order.id} className="col-md-6 col-lg-4 mb-4">
-                <div className="card shadow-sm h-100">
+            orders.map((order) => (
+              <div key={order.id} className="col-12 mb-4">
+                <div className="card shadow-sm">
                   <div className="card-body">
                     <div className="d-flex justify-content-between">
                       <h5 className="card-title mb-0">Order ID: {order.id}</h5>
                       <span
-                        className={`badge ${
-                          order.status === "DELIVERED"
-                            ? "bg-success"
-                            : order.status === "CANCELLED"
-                            ? "bg-danger"
-                            : "bg-warning"
-                        }`}
+                        className={`badge ${getStatusClass(order.status)}`}
                       >
                         {order.status}
                       </span>
@@ -103,10 +108,7 @@ const OrderPage = () => {
 
                     <div className="accordion" id={`accordion-${order.id}`}>
                       <div className="accordion-item">
-                        <h2
-                          className="accordion-header"
-                          id={`heading-${order.id}`}
-                        >
+                        <h2 className="accordion-header" id={`heading-${order.id}`}>
                           <button
                             className="accordion-button"
                             type="button"

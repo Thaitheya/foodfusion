@@ -36,6 +36,7 @@ export default function FoodEditPage() {
     if (isEditMode) {
       await update(food);
       toast.success(`Food "${food.name}" updated successfully!`);
+      navigate('/')
       return;
     }
 
@@ -141,7 +142,6 @@ export default function FoodEditPage() {
           )}
         </div>
 
-        {/* Cook Time */}
         <div className="mb-3">
           <label htmlFor="cookTime" className="form-label">
             Cook Time

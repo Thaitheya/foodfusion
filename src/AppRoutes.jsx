@@ -14,8 +14,11 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import AdminRoute from "./components/AdminRoute/AdminRoute";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import FoodEditPage from "./pages/FoodEdit/FoodEditPage";
+import OrderTrackPage from "./pages/OrderTrackPage/OrderTrackPage";
+import { useAuth } from "./Hooks/useAuth";
 
 const AppRoutes = () => {
+  const user = useAuth();
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
@@ -23,6 +26,9 @@ const AppRoutes = () => {
       <Route path="/tag/:tag" element={<HomePage />} />
       <Route path="/foods/:id" element={<FoodPage />} />
       <Route path="/cart" element={<CartPage />} />
+      {
+        user.admin && <Route path="/admin/dashboard" element={<Dashboard />} />
+      }
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<Register />} />
       <Route
@@ -54,6 +60,14 @@ const AppRoutes = () => {
         element={
           <AuthRoute>
            <OrderPage />
+          </AuthRoute>
+        }
+      />
+       <Route
+        path="/track/:orderId"
+        element={
+          <AuthRoute>
+           <OrderTrackPage />
           </AuthRoute>
         }
       />

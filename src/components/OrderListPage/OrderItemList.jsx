@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Price } from "../Price/Price";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function OrderItemsList({ order }) {
   return (
@@ -10,7 +9,7 @@ export default function OrderItemsList({ order }) {
       <table className="table table-bordered align-middle">
         <thead className="table-light">
           <tr>
-            <th>Image</th>
+            <th></th>
             <th>Item Name</th>
             <th>Price</th>
             <th>Quantity</th>
@@ -18,7 +17,7 @@ export default function OrderItemsList({ order }) {
           </tr>
         </thead>
         <tbody>
-          {order.items.map(item => (
+          {order.items.map((item) => (
             <tr key={item.food.id}>
               <td>
                 <Link to={`/food/${item.food.id}`}>
@@ -31,9 +30,9 @@ export default function OrderItemsList({ order }) {
                 </Link>
               </td>
               <td>{item.food.name}</td>
-              <td>₹{item.food.price.toFixed(2)}</td>
+              <td>₹{item.food.price}</td>
               <td>{item.quantity}</td>
-              <td>₹{item.price.toFixed(2)}</td>
+              <td>₹{item.price}</td>
             </tr>
           ))}
           <tr>

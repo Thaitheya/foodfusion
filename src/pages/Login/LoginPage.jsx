@@ -3,7 +3,8 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../Hooks/useAuth";
 import Title from "../../components/Title/Title";
-import foodImage from "../../../public/foods/food-8.jpg"; // Assuming you have a food image in assets
+import foodImage from "../../../public/foods/food-2.jpg";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
   const {
@@ -28,8 +29,7 @@ const LoginPage = () => {
     try {
       await login(email, password);
     } catch (err) {
-      // Handle error if login fails
-      console.error(err);
+      toast.error(err);
     } finally {
       setLoading(false);
     }
@@ -38,7 +38,6 @@ const LoginPage = () => {
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
-        {/* Left Column - Food Image */}
         <div className="col-md-6 col-lg-4 d-none d-lg-block">
           <img
             src={foodImage}
@@ -48,7 +47,6 @@ const LoginPage = () => {
           />
         </div>
 
-        {/* Right Column - Login Form */}
         <div className="col-md-6 col-lg-4">
           <div className="card shadow">
             <div className="card-body">
@@ -131,7 +129,6 @@ const LoginPage = () => {
   );
 };
 
-// Styles for layout and image
 const styles = {
   image: {
     borderRadius: "8px",
